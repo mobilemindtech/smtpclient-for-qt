@@ -56,7 +56,7 @@ void MimeMessage::setContent(MimePart *content) {
     this->content = content;
 }
 
-void MimeMessage::setReplyTo(EmailAddress* rto) {
+void MimeMessage::setReplyTo(const EmailAddress &rto) {
     replyTo = rto;
 }
 
