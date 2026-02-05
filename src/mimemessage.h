@@ -66,7 +66,6 @@ public:
     QString getSubject() const;
     const QStringList &getCustomHeaders() const;
     const QList<MimePart*> & getParts() const;
-    const EmailAddress* getReplyTo() const;
 
     MimePart& getContent();
     void setContent(MimePart *content);

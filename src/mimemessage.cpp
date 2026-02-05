@@ -261,9 +261,9 @@ void MimeMessage::writeToDevice(QIODevice &out) const {
     }
 
     /* ---------- Reply-To -------------- */
-     if (replyTo != nullptr) {
+      if (!replyTo.getAddress().isEmpty()) {
          header.append("Reply-To: ");
-         header.append(formatAddress(*replyTo, hEncoding));
+         header.append(formatAddress(replyTo, hEncoding));
          header.append("\r\n");
      }
 
