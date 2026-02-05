@@ -1,12 +1,12 @@
-SMTP Client for Qt (C++) - Version 2.0 [![Build Status](https://travis-ci.org/bluetiger9/SmtpClient-for-Qt.svg?branch=dev)](https://travis-ci.org/bluetiger9/SmtpClient-for-Qt)
+SMTP Client for Qt (C++) - Version 2.0 ![Linux Build](https://github.com/bluetiger9/SmtpClient-for-Qt/actions/workflows/linux-build.yml/badge.svg)
 =============================================
 
-The SmtpClient for Qt is small library writen for Qt 5 / 6 (C++ version) that allows application to send complex emails (plain text, html, attachments, inline files, etc.) using the Simple Mail Transfer Protocol (SMTP).
+The SmtpClient for Qt is small library written for Qt 6 (C++ version) that allows application to send complex emails (plain text, html, attachments, inline files, etc.) using the Simple Mail Transfer Protocol (SMTP).
 
 ## New in version 2.0:
 - Asynchronous & Synchronous working mode
 
-- Qt5 compatibility
+- Qt6 compatibility
 
 - Building as a shared library
 
@@ -105,9 +105,38 @@ int main(int argc, char *argv[])
 
 For more examples see the [Wiki/Examples](https://github.com/bluetiger9/SmtpClient-for-Qt/wiki/Examples).
 
+## Building
+
+### Building with CMake
+
+To build the project with CMake run the following commands:
+```sh
+$ mkdir build
+$ cd build
+$ cmake .. -DCMAKE_PREFIX_PATH=/qt/install/location/6.x.x/6.x.x/gcc_64/lib/cmake/Qt6 -DCMAKE_INSTALL_PREFIX="../release"
+$ cmake --build ./
+$ cmake --install ./
+```
+
+Or if you want to build without the demos and tests:
+```sh
+$ mkdir build
+$ cd build
+$ cmake .. -DBUILD_TESTS=OFF -DBUILD_DEMOS=OFF -DCMAKE_PREFIX_PATH=/qt/install/location/6.x.x/6.x.x/gcc_64/lib/cmake/Qt6 -DCMAKE_INSTALL_PREFIX="../release"
+$ cmake --build ./
+```
+
+### Building with QMake
+
+To build the project with QMake run the following commands:
+```sh
+$ /qt/install/location/6.x.x/6.x.x/gcc_64/bin/qmake .
+$ make
+```
+
 ## License
 
 This project (all files including the demos/examples) is licensed under the GNU LGPL, version 2.1.
 
 
-**Copyright (c) 2014-2022 - Attila Tőkés**
+**Copyright (c) 2014-2024 - Attila Tőkés**

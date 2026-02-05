@@ -30,7 +30,7 @@ public:
 
     /* [1] Constructors and Destructors */
 
-    MimeAttachment(QFile* file);
+    MimeAttachment(QFile* file, const QString& filename = "");
     ~MimeAttachment();
 
     /* [1] --- */

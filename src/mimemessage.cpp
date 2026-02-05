@@ -22,6 +22,7 @@
 #include <QDateTime>
 #include <QBuffer>
 #include "quotedprintable.h"
+#include "mimemultipart.h"
 #include <typeinfo>
 
 /* [1] Constructors and Destructors */
@@ -30,12 +31,17 @@ MimeMessage::MimeMessage(bool createAutoMimeContent) :
     replyTo(Q_NULLPTR),
     hEncoding(MimePart::_8Bit)
 {
-    if (createAutoMimeContent)
+    this->mimeContentAutoCreated = createAutoMimeContent;
+    if (createAutoMimeContent) {
         this->content = new MimeMultiPart();
+    }
 }
 
 MimeMessage::~MimeMessage()
 {
+    if (this->mimeContentAutoCreated) {
+        delete this->content;
+    }
 }
 
 /* [1] --- */
@@ -54,7 +60,7 @@ void MimeMessage::setReplyTo(EmailAddress* rto) {
     replyTo = rto;
 }
 
-const EmailAddress* MimeMessage::getReplyTo() const {
+EmailAddress MimeMessage::getReplyTo() const {
     return replyTo;
 }
 
@@ -64,10 +70,14 @@ void MimeMessage::setInReplyTo(const QString& inReplyTo)
 }
 
 
-
 void MimeMessage::setSender(const EmailAddress &sender)
 {
     this->sender = sender;
+}
+
+void MimeMessage::setReplyTo(const EmailAddress &replyTo)
+{
+    this->replyTo = replyTo;
 }
 
 void MimeMessage::addRecipient(const EmailAddress &rcpt, RecipientType type)
@@ -108,10 +118,14 @@ void MimeMessage::setSubject(const QString & subject)
     this->subject = subject;
 }
 
-void MimeMessage::addPart(MimePart *part)
+void MimeMessage::addPart(MimePart *part) {
+    this->addPart(part, false);
+}
+
+void MimeMessage::addPart(MimePart *part, const bool takeOwnership)
 {
     if (typeid(*content) == typeid(MimeMultiPart)) {
-        ((MimeMultiPart*) content)->addPart(part);
+        ((MimeMultiPart*) content)->addPart(part, takeOwnership);
     };
 }
 
@@ -124,6 +138,7 @@ EmailAddress MimeMessage::getSender() const
 {
     return sender;
 }
+
 
 const QList<EmailAddress> & MimeMessage::getRecipients(RecipientType type) const
 {
@@ -187,7 +202,7 @@ QByteArray MimeMessage::format(const QString &text, MimePart::Encoding encoding)
             result.append(" =?utf-8?B?" + text.toUtf8().toBase64() + "?=");
             break;
         case MimePart::QuotedPrintable:
-            result.append(" =?utf-8?Q?" + QuotedPrintable::encode(text.toUtf8()).toLocal8Bit().replace(' ', "_").replace(':',"=3A") + "?=");
+            result.append(" =?utf-8?Q?" + QuotedPrintable::encode(text.toUtf8()).toLocal8Bit().replace(' ', "_").replace(':',"=3A").replace(",", "=2C") + "?=");
             break;
         default:
             result.append(" ").append(text.toLocal8Bit());
@@ -202,6 +217,12 @@ void MimeMessage::writeToDevice(QIODevice &out) const {
     /* ---------- Sender / From ----------- */
     QByteArray header;
     header.append("From:" + formatAddress(sender, hEncoding) + "\r\n");
+    /* ---------------------------------- */
+
+    /* ---------- Reply-To ----------- */
+    if (!replyTo.getAddress().isEmpty()) {
+      header.append("Reply-To:" + formatAddress(replyTo, hEncoding) + "\r\n");
+    }
     /* ---------------------------------- */
 
     /* ------- Recipients / To ---------- */

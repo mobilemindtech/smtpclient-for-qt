@@ -18,7 +18,6 @@
 
 #include <QBuffer>
 #include "mimepart.h"
-#include "quotedprintable.h"
 #include "mimebase64formatter.h"
 #include "mimeqpformatter.h"
 #include "mimebase64encoder.h"
@@ -192,7 +191,7 @@ void MimePart::writeToDevice(QIODevice &device) const {
 
     /* === End of Header Prepare === */
 
-    device.write(header.toLatin1());
+    device.write(header.toUtf8());
 
     writeContent(device);
 }

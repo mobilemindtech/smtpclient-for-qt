@@ -4,5 +4,10 @@
 Makefile
 moc_*
 *.pro.user*
+<<<<<<< HEAD
 .qmake.stash
 .qtc_clangd
+=======
+# CMake build directory
+build/
+>>>>>>> upstream/v2.0
