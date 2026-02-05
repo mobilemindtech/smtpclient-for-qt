@@ -56,17 +56,13 @@ void MimeMessage::setContent(MimePart *content) {
     this->content = content;
 }
 
-void MimeMessage::setReplyTo(const EmailAddress &rto) {
-    replyTo = rto;
-}
-
 EmailAddress MimeMessage::getReplyTo() const {
     return replyTo;
 }
 
 void MimeMessage::setInReplyTo(const QString& inReplyTo)
 {
-    mInReplyTo = inReplyTo;
+    this->mInReplyTo = inReplyTo;
 }
 
 
